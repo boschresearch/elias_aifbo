@@ -1,12 +1,52 @@
 AIFBO - ELIAS AI for Building Optimisation Competition Example Code
 ===
 
-Coming soon: example code for the ELIAS AI for Building Optimisation (AIFBO) prediction Kaggle competition.
+
+Intro
+---
+
+This is a repository that can serve as an initialization for participating in the 
+ELIAS Bosch AI for Building Optimisation (AIFBO) prediction competition. 
+It contains simple versions of the data loading/preprocessing/training/submission building blocks of a method for that
+competition. This allows
+participants a quick way to get to the core method development. Note that all of the building blocks might have
+to be modified to obtain well-performing, robust methods.
+
+For further details see `main.py` where all functions (using PyTorch) as well as a sample execution are gathered and
+described in more detail.
+
+Purpose of the repository and disclaimer
+---
+
+This software is a research prototype, solely developed for and published as part of the aforementioned ELIAS competition.
+It will neither be maintained nor monitored in any way.
 
 
+Software setup
+---
+
+The package manager used to set up this repo and that we recommend to get a virtual environment to run the scripts 
+is [uv](https://docs.astral.sh/uv/guides/install-python/). We recommend to install it.
+
+Once uv is installed installed, we recommend the following steps:
+1. go to root dir of this repo, 
+2. `uv venv`,
+3. then run `uv sync`.
 
 
+Set up and run simple load/preprocess/train/submission pipeline
+---
 
+A simple sample pipeline for load/preprocess/train/submission is contained in `main.py`. Run it in the following way:
+
+1. Download the competition data from Kaggle and put it into the `data/kaggle_dl/` folder (it should have folders like
+`data/kaggle_dl/RBHU-2025-01` etc., 
+to make the file structure compliant with the format required by the `main.py` script).
+2. Do `uv run main.py`.
+
+Again, be aware that this pipeline is just a starting point for building methods to participating in this competition.
+In particular, consider using the additional 2024 building data from Zenodo: [part 1](https://zenodo.org/records/12590466), 
+[part 2](https://zenodo.org/records/14591934).
 
 
 License
