@@ -10,7 +10,8 @@ ELIAS Bosch AI for Building Optimisation (AIFBO) prediction competition.
 It contains simple versions of the data loading/preprocessing/training/submission building blocks of a method for that
 competition. This allows
 participants a quick way to get to the core method development. Note that all of the building blocks might have
-to be modified to obtain well-performing, robust methods.
+to be modified to obtain well-performing, robust methods. 
+In particular, more predictor variables and data should be used.
 
 For further details see `main.py` where all functions (using PyTorch) as well as a sample execution are gathered and
 described in more detail.
@@ -39,9 +40,9 @@ Set up and run simple load/preprocess/train/submission pipeline
 
 A simple sample pipeline for load/preprocess/train/submission is contained in `main.py`. Run it in the following way:
 
-1. Download the competition data from Kaggle and put it into the `data/kaggle_dl/` folder (it should have folders like
-`data/kaggle_dl/RBHU-2025-01` etc., 
-to make the file structure compliant with the format required by the `main.py` script).
+1. Download the competition data from Kaggle and put it into a (newly created) folder `data/kaggle_dl/` (there should then be folders like
+`data/kaggle_dl/RBHU-2025-01/` etc., 
+to make the file structure complies with the format required by the `main.py` script).
 2. Do `uv run main.py`.
 
 Again, be aware that this pipeline is just a starting point for building methods to participating in this competition.
