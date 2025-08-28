@@ -68,8 +68,9 @@ TEST_START_DATETIME = datetime(2025, 6, 1)  # start of test set
 TEST_INPUT_DATA_FILE_PATHS = list(
     chain(
         glob.glob(
-            f"{DATA_DIR}/kaggle_dl/RBHU-2025-05/RBHU/**/*.parquet", recursive=True  # just for the lag
-        ),
+            f"{DATA_DIR}/kaggle_dl/RBHU-2025-05/RBHU/**/*.parquet",
+            recursive=True,
+        ),  # just for the lag
         glob.glob(
             f"{DATA_DIR}/kaggle_dl/RBHU-2025-06/RBHU/**/*.parquet", recursive=True
         ),
@@ -87,7 +88,7 @@ EXAMPLE_PREDICTOR_VARIABLE_NAMES = [
 ]  # example predictor variables
 SUBMISSION_FILE_PATH = f"{OUTPUTS_DIR}/submission_file.csv"
 SUBMISSION_FILE_TARGET_VARIABLE_COLUMN_NAME = "TARGET_VARIABLE"
-SUBMISSION_FILE_DATETIME_FORMAT = '%Y-%m-%d_%H:%M:%S'
+SUBMISSION_FILE_DATETIME_FORMAT = "%Y-%m-%d_%H:%M:%S"
 
 
 def simple_load_and_resample_data(
@@ -118,7 +119,7 @@ def simple_load_and_resample_data(
 
     else:
         # load, preprocess and group timeseries per sensor (i.e., for each sensor, got multiple periods):
-        print("Start loading and preprocessing data ...")
+        print("Start loading and preprocessing a dataset ...")
         dataframes_per_sensor = {}
         for path in tqdm(data_file_paths):
             name = path.split("/")[-1].replace(".parquet", "")
@@ -200,7 +201,7 @@ def simple_eval_and_submission_creation(
         create_submission_df: If True, a DataFrame will be created from the predictions,
             with the index being the datetime of the timestamp in the first column of the tensor `y_pred`. Use this
             option to afterwards create a submission file that can then be submitted to the competition.
-            If a datetime is provided, the DataFrame will only contain entries from that datetime onwards. 
+            If a datetime is provided, the DataFrame will only contain entries from that datetime onwards.
 
     Returns:
         A dictionary containing the evaluation results. If `generate_timeseries_prediction` is True, it will contain
@@ -284,7 +285,9 @@ def simple_eval_and_submission_creation(
                 if create_submission_df == True:
                     res["ys_pred_df"] = ys_pred_df
                 elif isinstance(create_submission_df, datetime):
-                    res["ys_pred_df"] = ys_pred_df[ys_pred_df.index >= create_submission_df]
+                    res["ys_pred_df"] = ys_pred_df[
+                        ys_pred_df.index >= create_submission_df
+                    ]
     return res
 
 
@@ -306,8 +309,8 @@ def simple_feature_dataset(
             a column needs to exist for the target variable.
             If False, the target variable will be used as is, i.e., the dataset can be used for training or validation
             where the target variable is available in the raw data.
-        normalize: normalize selected columns of the timeseries data. 
-            if True, take mean and std from the data (and return that info), 
+        normalize: normalize selected columns of the timeseries data.
+            if True, take mean and std from the data (and return that info),
             if a dict, use the contained mean and std.
     Returns:
         A torch dataset containing pairs of input features and target variable values. Note that both, input features'
@@ -320,7 +323,9 @@ def simple_feature_dataset(
     input_seq_len = int(60 / RESAMPLE_FREQ_MIN) * 24
     input_seq_step = 6
     stride = 1  # step size for sliding window
-    predict_ahead = int(60 / RESAMPLE_FREQ_MIN) * 0  # lead / ahead time to forecast, in steps of RESAMPLE_FREQ_MIN
+    predict_ahead = (
+        int(60 / RESAMPLE_FREQ_MIN) * 0
+    )  # ahead lead time to forecast, in steps of RESAMPLE_FREQ_MIN
 
     # restrict to only relevant/valid data:
     timeseries_df = full_multivariate_timeseries_df[
@@ -598,10 +603,12 @@ if __name__ == "__main__":
         create_submission_df=TEST_START_DATETIME,
     )
     test_prediction_df = res_eval_test_input["ys_pred_df"]
-    
+
     test_prediction_df_for_csv = test_prediction_df.copy()
     test_prediction_df_for_csv.index = test_prediction_df.index.tz_localize(tzinfo)
-    test_prediction_df_for_csv.index = test_prediction_df.index.strftime(SUBMISSION_FILE_DATETIME_FORMAT)
+    test_prediction_df_for_csv.index = test_prediction_df.index.strftime(
+        SUBMISSION_FILE_DATETIME_FORMAT
+    )
     test_prediction_df_for_csv.index.name = "ID"
     test_prediction_df_for_csv.to_csv(
         SUBMISSION_FILE_PATH,
