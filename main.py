@@ -306,6 +306,9 @@ def simple_feature_dataset(
             a column needs to exist for the target variable.
             If False, the target variable will be used as is, i.e., the dataset can be used for training or validation
             where the target variable is available in the raw data.
+        normalize: normalize selected columns of the timeseries data. 
+            if True, take mean and std from the data (and return that info), 
+            if a dict, use the contained mean and std.
     Returns:
         A torch dataset containing pairs of input features and target variable values. Note that both, input features'
         and target variable's first entry is the timestamp of the prediction, i.e., the time at which the target
@@ -550,7 +553,7 @@ if __name__ == "__main__":
     )
 
     # Turn it into data loaders for training, validation, and submission (where submission loader differs in that
-    # it has no target variable, i.e. y):
+    # it has no target variable values, i.e. y):
     len_full_train_dataset = len(full_train_dataset)
     split_index = int(0.9 * len_full_train_dataset)
     train_dataset = torch.utils.data.Subset(full_train_dataset, range(split_index))
