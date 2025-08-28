@@ -6,7 +6,7 @@ Intro
 ---
 
 This is a repository that can serve as an initialization for participating in the 
-ELIAS Bosch AI for Building Optimisation (AIFBO) prediction competition. 
+ELIAS AI for Building Optimisation (AIFBO) prediction competition. 
 It contains simple versions of the data loading/preprocessing/training/submission building blocks of a method for that
 competition. This allows
 participants a quick way to get to the core method development. Note that all of the building blocks might have
