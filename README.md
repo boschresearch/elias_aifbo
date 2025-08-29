@@ -10,8 +10,12 @@ ELIAS AI for Building Optimisation (AIFBO) prediction competition.
 It contains simple versions of the data loading/preprocessing/training/submission building blocks of a method for that
 competition. This allows
 participants a quick way to get to the core method development. Note that all of the building blocks might have
-to be modified to obtain well-performing, robust methods. 
-In particular, more predictor variables and data should be used.
+to be modified to obtain well-performing, robust methods, in particular, these aspects are worth improving:
+* take more or all of the covariate variables as predictors (there are hundreds), not just the current few example ones
+* also include the 2024 data from source Zenodo, see `README.md` or competition page for details
+* some timeseries may rather need linear interpolation instead of the forward fill (ffill) that is currently used
+  (reason for the ffill is that, at least for some time series, the recodring is change-triggered).
+* and of course the model and training which lies at the core of the competition, and is currently just a toy example
 
 For further details see `main.py` where all functions (using PyTorch) as well as a sample execution are gathered and
 described in more detail.
