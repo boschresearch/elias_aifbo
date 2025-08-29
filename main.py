@@ -40,7 +40,7 @@ torch.set_default_device("cuda" if torch.cuda.is_available() else "cpu")
 print(torch.get_default_device())
 torch.set_default_dtype(
     torch.float64
-)  # with lower than float64 precision currently the eventual timestamps may be off
+)  # with lower than float64 precision, the eventual timestamps may be off
 
 
 DATA_DIR = "data"
@@ -84,7 +84,7 @@ EPS = 1e-6
 TARGET_VARIABLE_NAME = "B205WC000.AM02"  # the target variable to be predicted
 EXAMPLE_PREDICTOR_VARIABLE_NAMES = [
     "B205WC000.AM01",  # a supply temperature chilled water
-    "B106WS01.AM54",  # a external temperature
+    "B106WS01.AM54",  # an external temperature
 ]  # example predictor variables
 SUBMISSION_FILE_PATH = f"{OUTPUTS_DIR}/submission_file.csv"
 SUBMISSION_FILE_TARGET_VARIABLE_COLUMN_NAME = "TARGET_VARIABLE"
@@ -320,12 +320,10 @@ def simple_feature_dataset(
 
     info = {}
 
-    input_seq_len = int(60 / RESAMPLE_FREQ_MIN) * 24
-    input_seq_step = 6
+    input_seq_len = int(60 / RESAMPLE_FREQ_MIN) * 1  # hours
+    input_seq_step = 1
     stride = 1  # step size for sliding window
-    predict_ahead = (
-        int(60 / RESAMPLE_FREQ_MIN) * 0
-    )  # ahead lead time to forecast, in steps of RESAMPLE_FREQ_MIN
+    predict_ahead = int(60 / RESAMPLE_FREQ_MIN) * 3  # hours
 
     # restrict to only relevant/valid data:
     timeseries_df = full_multivariate_timeseries_df[
@@ -471,7 +469,7 @@ def simple_model_and_train(train_loader, vali_loader, loss_fn):
             super().__init__()
             self.mlp = torchvision.ops.MLP(
                 in_channels=input_size,
-                hidden_channels=[128, 128, 128, 1],
+                hidden_channels=[128, 128, 1],
                 norm_layer=nn.LayerNorm,
                 # dropout=0.1,
             ).to(dtype=torch.get_default_dtype())
@@ -491,7 +489,6 @@ def simple_model_and_train(train_loader, vali_loader, loss_fn):
 
     for epoch in range(200):
         model.train()
-        # train_losses = []
         cum_batch_loss_list = []
         for _, (x_true, y_true) in enumerate(train_loader):
             assert ~x_true.isnan().any() and ~y_true.isnan().any()
@@ -507,13 +504,11 @@ def simple_model_and_train(train_loader, vali_loader, loss_fn):
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-            # train_losses.append(loss.item())
             batch_size = y_true.shape[0]
             cum_loss = (
                 loss * batch_size
             )  # multiply by batch size to be invariant to batch size
             cum_batch_loss_list.append(cum_loss.unsqueeze(0))
-        # avg_train_loss_running = sum(train_losses) / len(train_losses)
         avg_train_loss_running = torch.cat(cum_batch_loss_list).sum() / len(
             train_loader.dataset
         )
@@ -560,7 +555,7 @@ if __name__ == "__main__":
     # Turn it into data loaders for training, validation, and submission (where submission loader differs in that
     # it has no target variable values, i.e. y):
     len_full_train_dataset = len(full_train_dataset)
-    split_index = int(0.9 * len_full_train_dataset)
+    split_index = int(0.8 * len_full_train_dataset)
     train_dataset = torch.utils.data.Subset(full_train_dataset, range(split_index))
     vali_dataset = torch.utils.data.Subset(
         full_train_dataset, range(split_index, len_full_train_dataset)
