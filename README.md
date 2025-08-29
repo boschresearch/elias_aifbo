@@ -1,4 +1,4 @@
-AIFBO - ELIAS AI for Building Optimisation Competition Example Code
+Example Code - AI-Based Modeling for Energy-Efficient Buildings - Competition
 ===
 
 
@@ -6,7 +6,7 @@ Intro
 ---
 
 This is a repository that can serve as an initialization for participating in the 
-ELIAS AI for Building Optimisation (AIFBO) prediction competition. 
+ELIAS AI-Based Modeling for Energy-Efficient Buildings competition. 
 It contains simple versions of the data loading/preprocessing/training/submission building blocks of a method for that
 competition. This allows
 participants a quick way to get to the core method development. Note that all of the building blocks might have
