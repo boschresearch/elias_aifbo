@@ -321,7 +321,7 @@ def simple_feature_dataset(
     info = {}
 
     input_seq_len = int(60 / RESAMPLE_FREQ_MIN) * 1  # hours
-    input_seq_step = 1  # int(60 / RESAMPLE_FREQ_MIN)
+    input_seq_step = 1
     stride = 1  # step size for sliding window
     predict_ahead = int(60 / RESAMPLE_FREQ_MIN) * 3  # hours
 
