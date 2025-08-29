@@ -320,12 +320,10 @@ def simple_feature_dataset(
 
     info = {}
 
-    input_seq_len = int(60 / RESAMPLE_FREQ_MIN) * 24
-    input_seq_step = 6
+    input_seq_len = int(60 / RESAMPLE_FREQ_MIN) * 1  # hours
+    input_seq_step = 1  # int(60 / RESAMPLE_FREQ_MIN)
     stride = 1  # step size for sliding window
-    predict_ahead = (
-        int(60 / RESAMPLE_FREQ_MIN) * 0
-    )  # ahead lead time to forecast, in steps of RESAMPLE_FREQ_MIN
+    predict_ahead = (int(60 / RESAMPLE_FREQ_MIN) * 3)  # hours
 
     # restrict to only relevant/valid data:
     timeseries_df = full_multivariate_timeseries_df[
@@ -471,7 +469,7 @@ def simple_model_and_train(train_loader, vali_loader, loss_fn):
             super().__init__()
             self.mlp = torchvision.ops.MLP(
                 in_channels=input_size,
-                hidden_channels=[128, 128, 128, 1],
+                hidden_channels=[128, 128, 1],
                 norm_layer=nn.LayerNorm,
                 # dropout=0.1,
             ).to(dtype=torch.get_default_dtype())
@@ -560,7 +558,7 @@ if __name__ == "__main__":
     # Turn it into data loaders for training, validation, and submission (where submission loader differs in that
     # it has no target variable values, i.e. y):
     len_full_train_dataset = len(full_train_dataset)
-    split_index = int(0.9 * len_full_train_dataset)
+    split_index = int(0.8 * len_full_train_dataset)
     train_dataset = torch.utils.data.Subset(full_train_dataset, range(split_index))
     vali_dataset = torch.utils.data.Subset(
         full_train_dataset, range(split_index, len_full_train_dataset)
