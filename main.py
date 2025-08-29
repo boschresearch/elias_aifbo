@@ -7,12 +7,7 @@ It contains simple versions of the essential components for
 * defining a simple toy example model and training it,
 * and evaluating and creating the submission file of that model on the test input data.
 
-Note that all of the components are just starting points, and many aspects can still be improved:
-* take more or all of the covariate variables as predictors (there are hundreds), not just the current few example ones
-* also include the 2024 data from source Zenodo, see `README.md` or competition page for details
-* some timeseries may rather need linear interpolation instead of the forward fill (ffill) that is currently used
-  (reason for the ffill is that, at least for some time series, the recodring is change-triggered).
-* and of course the model and training which lies at the core of the competition, and is currently just a toy example
+Note that all of the components are just starting points, and many aspects can still be improved, see also `README.md`.
 """
 
 # Copyright (c) 2025 Robert Bosch GmbH
