@@ -40,7 +40,7 @@ torch.set_default_device("cuda" if torch.cuda.is_available() else "cpu")
 print(torch.get_default_device())
 torch.set_default_dtype(
     torch.float64
-)  # with lower than float64 precision currently the eventual timestamps may be off
+)  # with lower than float64 precision, the eventual timestamps may be off
 
 
 DATA_DIR = "data"
@@ -84,7 +84,7 @@ EPS = 1e-6
 TARGET_VARIABLE_NAME = "B205WC000.AM02"  # the target variable to be predicted
 EXAMPLE_PREDICTOR_VARIABLE_NAMES = [
     "B205WC000.AM01",  # a supply temperature chilled water
-    "B106WS01.AM54",  # a external temperature
+    "B106WS01.AM54",  # an external temperature
 ]  # example predictor variables
 SUBMISSION_FILE_PATH = f"{OUTPUTS_DIR}/submission_file.csv"
 SUBMISSION_FILE_TARGET_VARIABLE_COLUMN_NAME = "TARGET_VARIABLE"
@@ -323,7 +323,7 @@ def simple_feature_dataset(
     input_seq_len = int(60 / RESAMPLE_FREQ_MIN) * 1  # hours
     input_seq_step = 1  # int(60 / RESAMPLE_FREQ_MIN)
     stride = 1  # step size for sliding window
-    predict_ahead = (int(60 / RESAMPLE_FREQ_MIN) * 3)  # hours
+    predict_ahead = int(60 / RESAMPLE_FREQ_MIN) * 3  # hours
 
     # restrict to only relevant/valid data:
     timeseries_df = full_multivariate_timeseries_df[
@@ -489,7 +489,6 @@ def simple_model_and_train(train_loader, vali_loader, loss_fn):
 
     for epoch in range(200):
         model.train()
-        # train_losses = []
         cum_batch_loss_list = []
         for _, (x_true, y_true) in enumerate(train_loader):
             assert ~x_true.isnan().any() and ~y_true.isnan().any()
@@ -505,13 +504,11 @@ def simple_model_and_train(train_loader, vali_loader, loss_fn):
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-            # train_losses.append(loss.item())
             batch_size = y_true.shape[0]
             cum_loss = (
                 loss * batch_size
             )  # multiply by batch size to be invariant to batch size
             cum_batch_loss_list.append(cum_loss.unsqueeze(0))
-        # avg_train_loss_running = sum(train_losses) / len(train_losses)
         avg_train_loss_running = torch.cat(cum_batch_loss_list).sum() / len(
             train_loader.dataset
         )
