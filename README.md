@@ -48,6 +48,7 @@ A simple sample pipeline for load/preprocess/train/submission is contained in `m
 `data/kaggle_dl/RBHU-2025-01/` etc., 
 so that the file structure complies with the format required by the `main.py` script).
 2. Do `uv run main.py`.
+3. Once run, this produces several outputs, among others the `submission_file.csv` which can then be uploaded to the competition
 
 For further details see `main.py` where all functions (using PyTorch) as well as a sample execution are gathered and
 described in more detail.

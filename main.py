@@ -5,7 +5,7 @@ It contains simple versions of the essential components for
 * loading and preprocessing data,
 * defining a simple torch pairs dataset for causal prediction (i.e., using only past to predict future),
 * defining a simple toy example model and training it,
-* and evaluating and creating the submission file of that model on the test input data.
+* and evaluating and creating the submission file (`submission_file.csv`) of that model on the test input data.
 
 Note that all of the components are just starting points, and many aspects can still be improved, see also `README.md`.
 """
@@ -466,7 +466,6 @@ def simple_model_and_train(train_loader, vali_loader, loss_fn):
                 in_channels=input_size,
                 hidden_channels=[128, 128, 1],
                 norm_layer=nn.LayerNorm,
-                # dropout=0.1,
             ).to(dtype=torch.get_default_dtype())
 
         def forward(self, x):
@@ -600,6 +599,8 @@ if __name__ == "__main__":
         SUBMISSION_FILE_DATETIME_FORMAT
     )
     test_prediction_df_for_csv.index.name = "ID"
+    
+    # write the submission file that can then be uploaded to the competition page:
     test_prediction_df_for_csv.to_csv(
         SUBMISSION_FILE_PATH,
         index=True,
