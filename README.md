@@ -17,7 +17,7 @@ to be modified to obtain well-performing, robust methods, in particular, these a
 * also include the 2024 building sensor data from source Zenodo, [part 1](https://zenodo.org/records/12590466), 
 [part 2](https://zenodo.org/records/14591934), see competition page for details
 * some timeseries may rather need linear interpolation instead of the forward fill (ffill) that is currently used
-  (reason for the ffill is that, at least for some time series, the recodring is change-triggered).
+  (reason for the ffill is that, at least for some time series, the recording is change-triggered).
 * and of course the model and training which lies at the core of the competition, and is currently just a toy example
 
 Purpose of the repository and disclaimer
@@ -33,7 +33,7 @@ Software setup
 The package manager used to set up this repo and that we recommend to get a virtual environment to run the scripts 
 is [uv](https://docs.astral.sh/uv/guides/install-python/). We recommend to install it.
 
-Once uv is installed installed, we recommend the following steps:
+Once uv is installed, we recommend the following steps:
 1. go to root dir of this repo, 
 2. `uv venv`,
 3. then run `uv sync`.
